@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "ERC20 Wallet for Metamask or Mist",
     "scripts": {
-        "lint": "eslint ./",
+        "lint": "eslint src",
         "build": "cross-env NODE_ENV=production webpack",
         "test": "truffle test",
         "dev": "cross-env NODE_ENV=development node server.js"

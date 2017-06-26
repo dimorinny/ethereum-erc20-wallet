@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actionCreators from '../../actions/token';
 import Account from '../../components/account/account';
+import ErrorComponent from '../../components/error/error-component';
 import './wallet.css';
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -25,17 +26,48 @@ export default class WalletPage extends Component {
     };
 
     render() {
-        const {accountState} = this.props;
-        const {error, account, isPending} = accountState;
+        const {error, isPending} = this.props.accountState;
+
+        let walletView;
+
+        if (isPending) {
+            walletView = WalletPage.renderProgress();
+        } else if (error) {
+            walletView = this.renderError();
+        } else {
+            walletView = this.renderWallet();
+        }
 
         return (
             <div>
-                <Account
-                    error={error}
-                    account={account}
-                    isPending={isPending}
-                />
+                {walletView}
             </div>
+        );
+    };
+
+    static renderProgress() {
+        return (
+            <h3>Progress...</h3>
+        );
+    };
+
+    renderError() {
+        const {error} = this.props.accountState;
+
+        return (
+            <ErrorComponent
+                payload={error}
+            />
+        );
+    };
+
+    renderWallet() {
+        const {account} = this.props.accountState;
+
+        return (
+            <Account
+                account={account}
+            />
         );
     };
 }
