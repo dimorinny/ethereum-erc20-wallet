@@ -2,32 +2,37 @@ import abi from 'human-standard-token-abi';
 import {provideWeb3, currentAccount} from './web3';
 
 let _cachedToken;
+let _cachedAddress;
 
-function _provideToken(web3) {
-    if (_cachedToken) {
+function _provideToken(web3, address) {
+    if (_cachedToken && _cachedAddress === address) {
         return _cachedToken;
     }
 
+    _cachedAddress = address;
     _cachedToken = web3.eth
         .contract(abi)
-        .at('0x3bb4f2de09fce107b58f9cb5d8a7ca84a2f409e9');
+        .at(address);
+
+    // let transferEvent = _cachedToken.Transfer({_to: account}, {fromBlock: 0, toBlock: 'latest'});
+    // transferEvent.get((_, log) => { console.log(log); });
 
     return _cachedToken;
 }
 
-export function provideToken() {
+export function provideToken(contractAddress) {
     return provideWeb3()
-        .then(_provideToken);
+        .then((web3) => _provideToken(web3, contractAddress));
 }
 
-export function executeTokenMethod(execution) {
+export function executeTokenMethod(contractAddress, execution) {
     let address;
 
     return currentAccount()
         .then(account => {
             address = account;
         })
-        .then(provideToken)
+        .then(() => provideToken(contractAddress))
         .then(instance => {
             return new Promise((resolve, reject) => {
                 execution(address, instance)((error, data) => {

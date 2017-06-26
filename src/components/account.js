@@ -9,18 +9,15 @@ export default class Account extends Component {
             address: PropTypes.string.isRequired,
             balance: PropTypes.number.isRequired
         }),
-        isPending: PropTypes.bool,
-        error: PropTypes.string
+        isPending: PropTypes.bool
     };
 
     render() {
-        const {account, isPending, error} = this.props;
+        const {account, isPending} = this.props;
 
         let accountView;
 
-        if (error) {
-            accountView = Account.renderError(error);
-        } else if (isPending) {
+        if (isPending) {
             accountView = Account.renderProgress();
         } else {
             accountView = Account.renderAccount(account);
@@ -30,12 +27,6 @@ export default class Account extends Component {
             <div>
                 {accountView}
             </div>
-        );
-    };
-
-    static renderError(error) {
-        return (
-            <div>{error}</div>
         );
     };
 
