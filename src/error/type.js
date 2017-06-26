@@ -1,9 +1,12 @@
+import metamaskPath from '../../static/img/metamask.png';
+
 export const INVALID_ADDRESS_ERROR = {
     title: 'Invalid address',
     description: 'test'
 };
 
 export const WEB3_ERROR = {
-    title: 'Error load your account',
-    description: 'Use static Metamask or Mist projects for authorization in blockchain.'
+    img: metamaskPath,
+    title: 'Account Loading Error',
+    description: 'Use Metamask or Mist project for authorization in blockchain.'
 };

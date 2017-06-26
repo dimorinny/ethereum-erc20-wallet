@@ -97,6 +97,19 @@ module.exports = {
             use: 'json-loader',
             exclude: '/node_modules/',
             include: path.join(__dirname, 'src')
+        }, {
+            test: /\.(jpe?g|png|gif|svg)$/i,
+            use: [
+                'file-loader?name=img/[name].[ext]',
+                'image-webpack-loader'
+            ],
+            exclude: '/node_modules/',
+            include: path.join(__dirname, 'static/img')
+        }, {
+            test: /\.(ttf)$/i,
+            use: 'file-loader?name=font/[name].[ext]',
+            exclude: '/node_modules/',
+            include: path.join(__dirname, 'static/font')
         }]
     }
 };

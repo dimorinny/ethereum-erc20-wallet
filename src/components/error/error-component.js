@@ -12,12 +12,13 @@ export default class ErrorComponent extends Component {
     };
 
     render() {
-        const {title, description} = this.props.payload;
+        const {title, description, img} = this.props.payload;
 
         return (
-            <div>
-                <h2>{title}</h2>
-                <h4>{description}</h4>
+            <div className='error_container'>
+                <img className='error_image' src={img}/>
+                <div className='error_title'>{title}</div>
+                <div className='error_description'>{description}</div>
             </div>
         );
     };
