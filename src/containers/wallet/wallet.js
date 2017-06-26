@@ -3,7 +3,7 @@ import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actionCreators from '../../actions/token';
-import Account from '../../components/account';
+import Account from '../../components/account/account';
 import './wallet.css';
 
 @connect(mapStateToProps, mapDispatchToProps)

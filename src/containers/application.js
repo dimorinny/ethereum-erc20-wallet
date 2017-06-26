@@ -3,6 +3,8 @@ import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actionCreators from '../actions/token';
+import ErrorComponent from '../components/error/error-component';
+import {WEB3_ERROR} from '../error/type';
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Application extends Component {
@@ -19,10 +21,10 @@ export default class Application extends Component {
 
         let content;
 
-        if (error == null) {
-            content = this.renderContent();
+        if (error != null && error === WEB3_ERROR) {
+            content = this.renderError();
         } else {
-            content = Application.renderError();
+            content = this.renderContent();
         }
 
         return (
@@ -42,19 +44,15 @@ export default class Application extends Component {
         );
     };
 
-    static renderError() {
-        const metamask = <a href='https://github.com/MetaMask'>Metamask</a>;
-        const mist = <a href='https://github.com/ethereum/mist'>Mist</a>;
+    renderError() {
+        const {error} = this.props.accountState;
 
         return (
-            <div>
-                <h2>Error load your account:</h2>
-                <h4>
-                    Use static {metamask} or {mist} projects for authorization in blockchain.
-                </h4>
-            </div>
+            <ErrorComponent
+                payload={error}
+            />
         );
-    };
+    }
 }
 
 function mapStateToProps(state) {

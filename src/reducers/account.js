@@ -1,5 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import {LOAD_ACCOUNT} from '../constants';
+import {typeToError} from '../error/account';
 
 const ACCOUNT_DEFAULT_STATE = {
     account: null,
@@ -17,7 +18,7 @@ export default typeToReducer({
         REJECTED: (state, action) => ({
             ...state,
             isPending: false,
-            error: 'Load account error'
+            error: typeToError(action.payload.message)
         }),
         FULFILLED: (state, action) => ({
             ...state,

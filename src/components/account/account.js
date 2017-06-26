@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
+import ErrorComponent from '../../components/error/error-component';
 import './account.css';
 
 export default class Account extends Component {
@@ -13,14 +14,16 @@ export default class Account extends Component {
     };
 
     render() {
-        const {account, isPending} = this.props;
+        const {error, isPending} = this.props;
 
         let accountView;
 
         if (isPending) {
             accountView = Account.renderProgress();
+        } else if (error) {
+            accountView = this.renderError();
         } else {
-            accountView = Account.renderAccount(account);
+            accountView = this.renderAccount();
         }
 
         return (
@@ -36,7 +39,19 @@ export default class Account extends Component {
         );
     };
 
-    static renderAccount({address, balance}) {
+    renderError() {
+        const {error} = this.props;
+
+        return (
+            <ErrorComponent
+                payload={error}
+            />
+        );
+    }
+
+    renderAccount() {
+        const {address, balance} = this.props.account;
+
         return (
             <div className='account_address'>
                 <div>Address: {address}</div>
