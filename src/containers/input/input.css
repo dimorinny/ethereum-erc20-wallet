@@ -1,0 +1,23 @@
+.input_container {
+    margin: 0 auto;
+    display: block;
+    width: 650px;
+}
+
+.input_header_container {
+    width: 500px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.input_header_image {
+    display: block;
+    margin: 120px auto 24px;
+    width: 200px;
+    min-height: 186px;
+}
+
+.input_field {
+    width: 650px;
+    margin-top: 24px;
+}

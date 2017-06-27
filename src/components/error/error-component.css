@@ -6,8 +6,9 @@
 
 .error_image {
     display: block;
-    margin: 64px auto 32px;
-    width: 220px;
+    margin: 120px auto 32px;
+    width: 200px;
+    min-height: 186px;
 }
 
 .error_title {

@@ -1,3 +1,7 @@
+body {
+    line-height: 2.5em !important;
+}
+
 @font-face {
     font-family: 'Roboto';
     src: url('../static/font/roboto/Roboto-Regular.ttf');

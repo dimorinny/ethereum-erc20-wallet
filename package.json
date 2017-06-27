@@ -50,6 +50,7 @@
         "redux-actions": "^2.0.1",
         "redux-logger": "^3.0.1",
         "redux-promise-middleware": "^4.2.0",
+        "semantic-ui-react": "^0.70.0",
         "type-to-reducer": "^1.0.3",
         "whatwg-fetch": "^2.0.2"
     }
