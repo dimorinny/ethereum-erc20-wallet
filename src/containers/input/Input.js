@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actionCreators from '../../actions/token';
 import {Icon, Input, Form} from 'semantic-ui-react';
-import metamaskPath from '../../../static/img/metamask.png';
+import ethereumPath from '../../../static/img/ethereum.png';
 import './input.css';
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -19,14 +19,14 @@ export default class InputPage extends Component {
             <div className='input_container'>
 
                 <div className='input_header_container'>
-                    <img className='input_header_image' src={metamaskPath}/>
+                    <img className='input_header_image' src={ethereumPath}/>
                 </div>
 
                 <Form onSubmit={() => this.props.router.push("qwe")}>
                     <Form.Field>
                         <Input
                             size='massive'
-                            placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C779D16553ed'
+                            placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C77...'
                             className='input_field'
                         />
                     </Form.Field>

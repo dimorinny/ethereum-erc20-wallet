@@ -1,8 +1,10 @@
 import metamaskPath from '../../static/img/metamask.png';
+import addressPath from '../../static/img/address.png';
 
 export const INVALID_ADDRESS_ERROR = {
-    title: 'Invalid address',
-    description: 'test'
+    img: addressPath,
+    title: 'Invalid Address',
+    description: 'Use valid Ethereum ERC20 token address.'
 };
 
 export const WEB3_ERROR = {

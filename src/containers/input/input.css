@@ -13,11 +13,11 @@
 .input_header_image {
     display: block;
     margin: 120px auto 24px;
-    width: 200px;
-    min-height: 186px;
+    width: 140px;
+    min-height: 226px;
 }
 
 .input_field {
-    width: 650px;
+    width: 600px;
     margin-top: 24px;
 }
