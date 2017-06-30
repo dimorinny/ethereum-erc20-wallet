@@ -3,17 +3,21 @@ import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actionCreators from '../../actions/token';
-import {Icon, Input, Form} from 'semantic-ui-react';
+import {Input, Form} from 'semantic-ui-react';
 import ethereumPath from '../../../static/img/ethereum.png';
 import './input.css';
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class InputPage extends Component {
 
-    static propTypes = {};
+    static propTypes = {
+        input: PropTypes.shape({
+            text: PropTypes.string.isRequired
+        })
+    };
 
     render() {
-        console.log(this.props);
+        const {input: {text}, actions} = this.props;
 
         return (
             <div className='input_container'>
@@ -22,12 +26,14 @@ export default class InputPage extends Component {
                     <img className='input_header_image' src={ethereumPath}/>
                 </div>
 
-                <Form onSubmit={() => this.props.router.push("qwe")}>
+                <Form onSubmit={() => this.props.router.push(text)}>
                     <Form.Field>
                         <Input
                             size='massive'
                             placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C77...'
                             className='input_field'
+                            value={text}
+                            onChange={(_, {value}) => actions.inputTextChanged(value)}
                         />
                     </Form.Field>
                 </Form>
@@ -37,7 +43,9 @@ export default class InputPage extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        input: state.input
+    };
 }
 
 function mapDispatchToProps(dispatch) {
