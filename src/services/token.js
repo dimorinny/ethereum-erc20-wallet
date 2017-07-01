@@ -1,21 +1,57 @@
 import {executeTokenMethod} from '../contract/token';
-import {mapUint} from '../util/mapping';
+import {mapNumber} from '../util/mapping';
 
 export function getAccount(contractAddress) {
-    let cachedAddress;
 
-    return executeTokenMethod(
+    let savedAddress;
+    let savedBalance;
+    let savedSymbol;
+    let savedTotalSupply;
+
+    const loadBalance = () => executeTokenMethod(
         contractAddress,
         (address, token) => {
-            cachedAddress = address;
+            savedAddress = address;
             return callback => token.balanceOf.call(address, callback);
         }
     )
-        .then(mapUint)
+        .then(mapNumber)
         .then((value) => value / 10000)
-        .then(balance => ({
-            address: cachedAddress,
-            balance: balance
+        .then(balance => {
+            savedBalance = balance;
+        });
+
+    const loadSymbol = () => executeTokenMethod(
+        contractAddress,
+        (_, token) => {
+            return callback => token.symbol.call(callback);
+        }
+    )
+        .then((symbol) => {
+            savedSymbol = symbol;
+        })
+        .catch(() => {});
+
+    const loadTotalSupply = () => executeTokenMethod(
+        contractAddress,
+        (_, token) => {
+            return callback => token.totalSupply.call(callback);
+        }
+    )
+        .then(mapNumber)
+        .then((totalSupply) => {
+            savedTotalSupply = totalSupply;
+        });
+
+    return loadBalance()
+        .then(loadSymbol)
+        .then(loadTotalSupply)
+        .then(() => ({
+            address: savedAddress,
+            contractAddress: contractAddress,
+            balance: savedBalance,
+            symbol: savedSymbol,
+            totalSupply: savedTotalSupply
         }));
 }
 
