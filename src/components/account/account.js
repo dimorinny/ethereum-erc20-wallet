@@ -32,22 +32,50 @@ export default class Account extends Component {
                         <Grid columns={2} divided>
                             <Grid.Row>
                                 <Grid.Column>
-                                    <div>Address: {address}</div>
-                                    <div>Balance: {balance.toNumber()}</div>
-                                    <div>
-                                        <Button
-                                            basic
-                                            disabled={balance.toNumber() === 0}
-                                            className='account_send_button'
-                                            color='black'>
-                                            <Icon name='send'/> Send Tokens
-                                        </Button>
-                                    </div>
+                                    {
+                                        Account.renderAddressItem(
+                                            'address book outline',
+                                            'Address',
+                                            address
+                                        )
+                                    }
+                                    {
+                                        Account.renderTextItem(
+                                            'money',
+                                            'Balance',
+                                            balance.toNumber()
+                                        )
+                                    }
+                                    <Button
+                                        basic
+                                        disabled={balance.toNumber() === 0}
+                                        className='account_send_button'
+                                        color='black'>
+                                        <Icon name='send'/> Send Tokens
+                                    </Button>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <div>Contract Address: {contractAddress}</div>
-                                    <div>Symbol: {symbol}</div>
-                                    <div>TotalSupply: {totalSupply.toFormat(0)}</div>
+                                    {
+                                        Account.renderAddressItem(
+                                            'sticky note',
+                                            'Contract Address',
+                                            contractAddress
+                                        )
+                                    }
+                                    {
+                                        Account.renderTextItem(
+                                            'tags',
+                                            'Symbol',
+                                            symbol
+                                        )
+                                    }
+                                    {
+                                        Account.renderTextItem(
+                                            'archive',
+                                            'TotalSupply',
+                                            totalSupply.toFormat(0)
+                                        )
+                                    }
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
@@ -55,6 +83,31 @@ export default class Account extends Component {
                 </Grid.Column>
                 <Grid.Column/>
             </Grid>
+        );
+    };
+
+    static renderAddressItem(icon, title, address) {
+        return Account.renderItem(
+            icon,
+            title,
+            <a target='_blank' href={'https://etherscan.io/address/' + address}>{address}</a>
+        );
+    };
+
+    static renderTextItem(icon, title, text) {
+        return Account.renderItem(
+            icon,
+            title,
+            text
+        );
+    };
+
+    static renderItem(icon, title, valueElement) {
+        return (
+            <div>
+                <Icon name={icon}/>
+                <b>{title}:</b> {valueElement}
+            </div>
         );
     };
 }
