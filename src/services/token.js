@@ -1,11 +1,11 @@
 import {executeTokenMethod} from '../contract/token';
-import {mapNumber} from '../util/mapping';
 
 export function getAccount(contractAddress) {
 
     let savedAddress;
     let savedBalance;
     let savedSymbol;
+    let savedDecimals;
     let savedTotalSupply;
 
     const loadBalance = () => executeTokenMethod(
@@ -15,8 +15,7 @@ export function getAccount(contractAddress) {
             return callback => token.balanceOf.call(address, callback);
         }
     )
-        .then(mapNumber)
-        .then((value) => value / 10000)
+        .then((value) => value.div(10000))
         .then(balance => {
             savedBalance = balance;
         });
@@ -30,7 +29,21 @@ export function getAccount(contractAddress) {
         .then((symbol) => {
             savedSymbol = symbol;
         })
-        .catch(() => {});
+        .catch(() => {
+        });
+
+    const loadDecimals = () => executeTokenMethod(
+        contractAddress,
+        (_, token) => {
+            return callback => token.decimals.call(callback);
+        }
+    )
+        .then((decimals) => {
+            savedDecimals = Math.pow(10, decimals.toNumber());
+        })
+        .catch(() => {
+            savedDecimals = 1;
+        });
 
     const loadTotalSupply = () => executeTokenMethod(
         contractAddress,
@@ -38,13 +51,14 @@ export function getAccount(contractAddress) {
             return callback => token.totalSupply.call(callback);
         }
     )
-        .then(mapNumber)
-        .then((totalSupply) => {
-            savedTotalSupply = totalSupply;
+        .then((totalSupply) => totalSupply.div(savedDecimals))
+        .then((number) => {
+            savedTotalSupply = number;
         });
 
     return loadBalance()
         .then(loadSymbol)
+        .then(loadDecimals)
         .then(loadTotalSupply)
         .then(() => ({
             address: savedAddress,
