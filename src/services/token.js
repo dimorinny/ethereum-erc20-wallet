@@ -1,4 +1,4 @@
-import {executeTokenMethod} from '../contract/token';
+import {executeTokenMethod, getTransferHistory} from '../contract/token';
 
 export function getAccount(contractAddress) {
 
@@ -7,6 +7,9 @@ export function getAccount(contractAddress) {
     let savedSymbol;
     let savedDecimals;
     let savedTotalSupply;
+
+    let incomingHistory;
+    let outcomingHistory;
 
     const loadBalance = () => executeTokenMethod(
         contractAddress,
@@ -56,16 +59,47 @@ export function getAccount(contractAddress) {
             savedTotalSupply = number;
         });
 
+    const mapHistoryItem = (item) => ({
+        blockHash: item.blockHash,
+        blockNumber: item.blockNumber,
+        transactionHash: item.transactionHash,
+        type: item.type,
+        from: item.args._from,
+        to: item.args._to,
+        value: item.args._value
+    });
+
+    const loadIncomingHistory = () => getTransferHistory(
+        contractAddress,
+        '_to'
+    )
+        .then((items) => items.map(mapHistoryItem))
+        .then((items) => {
+            incomingHistory = items;
+        });
+
+    const loadOutcomingHistory = () => getTransferHistory(
+        contractAddress,
+        '_from'
+    )
+        .then((items) => items.map(mapHistoryItem))
+        .then((items) => {
+            outcomingHistory = items;
+        });
+
     return loadBalance()
         .then(loadSymbol)
         .then(loadDecimals)
         .then(loadTotalSupply)
+        .then(loadIncomingHistory)
+        .then(loadOutcomingHistory)
         .then(() => ({
             address: savedAddress,
             contractAddress: contractAddress,
             balance: savedBalance,
             symbol: savedSymbol,
-            totalSupply: savedTotalSupply
+            totalSupply: savedTotalSupply,
+            incomingHistory: incomingHistory
         }));
 }
 

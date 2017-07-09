@@ -14,9 +14,6 @@ function _provideToken(web3, address) {
         .contract(abi)
         .at(address);
 
-    // let transferEvent = _cachedToken.Transfer({_to: account}, {fromBlock: 0, toBlock: 'latest'});
-    // transferEvent.get((_, log) => { console.log(log); });
-
     return _cachedToken;
 }
 
@@ -25,7 +22,41 @@ export function provideToken(contractAddress) {
         .then((web3) => _provideToken(web3, contractAddress));
 }
 
+export function getTransferHistory(contractAddress, key) {
+    return tokenMethod(
+        contractAddress,
+        (instance, address, resolve, reject) => {
+            instance.Transfer({[key]: address}, {fromBlock: 0, toBlock: 'latest'})
+                .get((error, items) => {
+                    console.log(error);
+                    console.log(items);
+
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(items);
+                    }
+                });
+        }
+    );
+}
+
 export function executeTokenMethod(contractAddress, execution) {
+    return tokenMethod(
+        contractAddress,
+        (instance, address, resolve, reject) => {
+            execution(address, instance)((error, data) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(data);
+                }
+            });
+        }
+    );
+}
+
+function tokenMethod(contractAddress, method) {
     let address;
 
     return currentAccount()
@@ -35,13 +66,7 @@ export function executeTokenMethod(contractAddress, execution) {
         .then(() => provideToken(contractAddress))
         .then(instance => {
             return new Promise((resolve, reject) => {
-                execution(address, instance)((error, data) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(data);
-                    }
-                })
+                method(instance, address, resolve, reject);
             });
         });
 }
