@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Grid, Segment, Button, Icon} from 'semantic-ui-react';
+import {Grid, Segment, Button, Icon, Divider} from 'semantic-ui-react';
 import './account.css';
 
 export default class Account extends Component {
@@ -80,6 +80,9 @@ export default class Account extends Component {
                             </Grid.Row>
                         </Grid>
                     </Segment>
+
+                    {/*TODO: show when not empty*/}
+                    <Divider horizontal className='account_history_header'>Transaction History</Divider>
                 </Grid.Column>
                 <Grid.Column/>
             </Grid>

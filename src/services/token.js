@@ -10,6 +10,7 @@ export function getAccount(contractAddress) {
 
     let incomingHistory;
     let outcomingHistory;
+    let history;
 
     const loadBalance = () => executeTokenMethod(
         contractAddress,
@@ -87,19 +88,26 @@ export function getAccount(contractAddress) {
             outcomingHistory = items;
         });
 
+    const combineHistory = () => {
+        history = incomingHistory
+            .concat(outcomingHistory)
+            .sort((first, second) => second - first);
+    };
+
     return loadBalance()
         .then(loadSymbol)
         .then(loadDecimals)
         .then(loadTotalSupply)
         .then(loadIncomingHistory)
         .then(loadOutcomingHistory)
+        .then(combineHistory)
         .then(() => ({
             address: savedAddress,
             contractAddress: contractAddress,
             balance: savedBalance,
             symbol: savedSymbol,
             totalSupply: savedTotalSupply,
-            incomingHistory: incomingHistory
+            history: history
         }));
 }
 
