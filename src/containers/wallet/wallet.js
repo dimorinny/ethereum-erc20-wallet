@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {Divider, Grid} from 'semantic-ui-react';
 import * as actionCreators from '../../actions/token';
 import Account from '../../components/account/account';
+import History from '../../components/history/history';
 import ErrorComponent from '../../components/error/error-component';
 import './wallet.css';
 
@@ -12,9 +14,13 @@ export default class WalletPage extends Component {
 
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        accountState: PropTypes.object.isRequired,
         params: PropTypes.shape({
-            address: PropTypes.string.isRequired
+            address: PropTypes.string.isRequired,
+            accountState: PropTypes.shape({
+                account: PropTypes.shape({
+                    history: PropTypes.array.isRequired
+                }).isRequired
+            }).isRequired,
         }).isRequired
     };
 
@@ -63,11 +69,26 @@ export default class WalletPage extends Component {
 
     renderWallet() {
         const {account} = this.props.accountState;
+        const {history} = account;
 
         return (
-            <Account
-                account={account}
-            />
+            <Grid columns='equal'>
+                <Grid.Column/>
+                <Grid.Column width={14}>
+                    <Account
+                        account={account}
+                    />
+
+                    <Divider horizontal className='wallet_history_header'>
+                        Transaction History
+                    </Divider>
+
+                    <History
+                        history={history}
+                    />
+                </Grid.Column>
+                <Grid.Column/>
+            </Grid>
         );
     };
 }

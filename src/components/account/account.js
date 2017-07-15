@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Grid, Segment, Button, Icon, Divider} from 'semantic-ui-react';
+import {Grid, Segment, Button, Icon} from 'semantic-ui-react';
 import './account.css';
 
 export default class Account extends Component {
@@ -25,67 +25,58 @@ export default class Account extends Component {
         } = this.props.account;
 
         return (
-            <Grid columns='equal'>
-                <Grid.Column/>
-                <Grid.Column width={14}>
-                    <Segment className='account_container'>
-                        <Grid columns={2} divided>
-                            <Grid.Row>
-                                <Grid.Column>
-                                    {
-                                        Account.renderAddressItem(
-                                            'address book outline',
-                                            'Address',
-                                            address
-                                        )
-                                    }
-                                    {
-                                        Account.renderTextItem(
-                                            'money',
-                                            'Balance',
-                                            balance.toNumber()
-                                        )
-                                    }
-                                    <Button
-                                        basic
-                                        disabled={balance.toNumber() === 0}
-                                        className='account_send_button'
-                                        color='black'>
-                                        <Icon name='send'/> Send Tokens
-                                    </Button>
-                                </Grid.Column>
-                                <Grid.Column>
-                                    {
-                                        Account.renderAddressItem(
-                                            'sticky note',
-                                            'Contract Address',
-                                            contractAddress
-                                        )
-                                    }
-                                    {
-                                        Account.renderTextItem(
-                                            'tags',
-                                            'Symbol',
-                                            symbol
-                                        )
-                                    }
-                                    {
-                                        Account.renderTextItem(
-                                            'archive',
-                                            'TotalSupply',
-                                            totalSupply.toFormat(0)
-                                        )
-                                    }
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Segment>
-
-                    {/*TODO: show when not empty*/}
-                    <Divider horizontal className='account_history_header'>Transaction History</Divider>
-                </Grid.Column>
-                <Grid.Column/>
-            </Grid>
+            <Segment className='account_container'>
+                <Grid columns={2} divided>
+                    <Grid.Row>
+                        <Grid.Column>
+                            {
+                                Account.renderAddressItem(
+                                    'address book outline',
+                                    'Address',
+                                    address
+                                )
+                            }
+                            {
+                                Account.renderTextItem(
+                                    'money',
+                                    'Balance',
+                                    balance.toNumber()
+                                )
+                            }
+                            <Button
+                                basic
+                                disabled={balance.toNumber() === 0}
+                                className='account_send_button'
+                                color='black'>
+                                <Icon name='send'/> Send Tokens
+                            </Button>
+                        </Grid.Column>
+                        <Grid.Column>
+                            {
+                                Account.renderAddressItem(
+                                    'sticky note',
+                                    'Contract Address',
+                                    contractAddress
+                                )
+                            }
+                            {
+                                Account.renderTextItem(
+                                    'tags',
+                                    'Symbol',
+                                    symbol
+                                )
+                            }
+                            {
+                                Account.renderTextItem(
+                                    'archive',
+                                    'TotalSupply',
+                                    totalSupply.toFormat(0)
+                                )
+                            }
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Segment>
         );
     };
 
