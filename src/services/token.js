@@ -2,6 +2,8 @@ import {executeTokenMethod, getTransferHistory} from '../contract/token';
 
 export function getAccount(contractAddress) {
 
+    const scaleFactor = 10000;
+
     let savedAddress;
     let savedBalance;
     let savedSymbol;
@@ -19,7 +21,7 @@ export function getAccount(contractAddress) {
             return callback => token.balanceOf.call(address, callback);
         }
     )
-        .then((value) => value.div(10000))
+        .then((value) => value.div(scaleFactor))
         .then(balance => {
             savedBalance = balance;
         });
@@ -60,21 +62,22 @@ export function getAccount(contractAddress) {
             savedTotalSupply = number;
         });
 
-    const mapHistoryItem = (item) => ({
+    const mapHistoryItem = (item, direction) => ({
         blockHash: item.blockHash,
         blockNumber: item.blockNumber,
         transactionHash: item.transactionHash,
         type: item.type,
+        direction: direction,
         from: item.args._from,
         to: item.args._to,
-        value: item.args._value
+        value: item.args._value.div(savedDecimals)
     });
 
     const loadIncomingHistory = () => getTransferHistory(
         contractAddress,
         '_to'
     )
-        .then((items) => items.map(mapHistoryItem))
+        .then((items) => items.map((item) => mapHistoryItem(item, 'In')))
         .then((items) => {
             incomingHistory = items;
         });
@@ -83,7 +86,7 @@ export function getAccount(contractAddress) {
         contractAddress,
         '_from'
     )
-        .then((items) => items.map(mapHistoryItem))
+        .then((items) => items.map((item) => mapHistoryItem(item, 'Out')))
         .then((items) => {
             outcomingHistory = items;
         });
@@ -91,7 +94,7 @@ export function getAccount(contractAddress) {
     const combineHistory = () => {
         history = incomingHistory
             .concat(outcomingHistory)
-            .sort((first, second) => second - first);
+            .sort((first, second) => second.blockNumber - first.blockNumber);
     };
 
     return loadBalance()

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Table} from 'semantic-ui-react';
+import {Table, Label} from 'semantic-ui-react';
+import {transactionLink, addressLink} from '../../util/etherscan';
 import './history.css';
 
 export default class History extends Component {
@@ -24,13 +25,15 @@ export default class History extends Component {
     };
 
     renderContent() {
+        const history = this.props.history;
+
         return (
             <div>
                 <Table basic='very' celled>
                     <Table.Header>
                         <Table.Row>
+                            <Table.HeaderCell>Direction</Table.HeaderCell>
                             <Table.HeaderCell>TxHash</Table.HeaderCell>
-                            <Table.HeaderCell>BlockHash</Table.HeaderCell>
                             <Table.HeaderCell>From</Table.HeaderCell>
                             <Table.HeaderCell>To</Table.HeaderCell>
                             <Table.HeaderCell>Value</Table.HeaderCell>
@@ -38,16 +41,70 @@ export default class History extends Component {
                     </Table.Header>
 
                     <Table.Body>
-                        <Table.Row>
-                            <Table.Cell>12</Table.Cell>
-                            <Table.Cell>12</Table.Cell>
-                            <Table.Cell>12</Table.Cell>
-                            <Table.Cell>12</Table.Cell>
-                            <Table.Cell>22</Table.Cell>
-                        </Table.Row>
+                        {history.map((item) => History.renderTransaction(item))}
                     </Table.Body>
                 </Table>
             </div>
         );
+    };
+
+    static renderTransaction(transaction) {
+        return (
+            <Table.Row key={transaction.transactionHash}>
+                <Table.Cell>
+                    <Label
+                        horizontal
+                        color={History.transactionColor(transaction)}
+                    >
+                        {transaction.direction}
+                    </Label>
+                </Table.Cell>
+                <Table.Cell>
+                    {
+                        History.renderLink(
+                            transaction.transactionHash,
+                            transactionLink(transaction.transactionHash)
+                        )
+                    }
+                </Table.Cell>
+                <Table.Cell>
+                    {
+                        History.renderLink(
+                            transaction.from,
+                            addressLink(transaction.from)
+                        )
+                    }
+                </Table.Cell>
+                <Table.Cell>
+                    {
+                        History.renderLink(
+                            transaction.to,
+                            addressLink(transaction.to)
+                        )
+                    }
+                </Table.Cell>
+                <Table.Cell>
+                    {transaction.value.toNumber()}
+                </Table.Cell>
+            </Table.Row>
+        );
+    };
+
+    static transactionColor({direction}) {
+        if (direction == 'In') {
+            return 'green';
+        } else {
+            return 'red';
+        }
     }
+
+    static renderLink(text, link) {
+        return (
+            <a
+                target='_blank'
+                href={link}>
+                {text.substring(0, 16) + '...'}
+            </a>
+        );
+    };
 }

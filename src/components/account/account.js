@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {Grid, Segment, Button, Icon} from 'semantic-ui-react';
+import {addressLink} from '../../util/etherscan';
 import './account.css';
 
 export default class Account extends Component {
@@ -84,7 +85,7 @@ export default class Account extends Component {
         return Account.renderItem(
             icon,
             title,
-            <a target='_blank' href={'https://etherscan.io/address/' + address}>{address}</a>
+            <a target='_blank' href={addressLink(address)}>{address}</a>
         );
     };
 

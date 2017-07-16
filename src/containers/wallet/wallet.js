@@ -16,11 +16,6 @@ export default class WalletPage extends Component {
         actions: PropTypes.object.isRequired,
         params: PropTypes.shape({
             address: PropTypes.string.isRequired,
-            accountState: PropTypes.shape({
-                account: PropTypes.shape({
-                    history: PropTypes.array.isRequired
-                }).isRequired
-            }).isRequired,
         }).isRequired
     };
 
@@ -79,7 +74,10 @@ export default class WalletPage extends Component {
                         account={account}
                     />
 
-                    <Divider horizontal className='wallet_history_header'>
+                    <Divider
+                        horizontal
+                        className='wallet_history_header'
+                    >
                         Transaction History
                     </Divider>
 
