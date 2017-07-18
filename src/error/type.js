@@ -7,6 +7,11 @@ export const INVALID_ADDRESS_ERROR = {
     description: 'Use valid Ethereum ERC20 token address.'
 };
 
+export const EMPTY_TRANSACTION_HISTORY = {
+    img: addressPath,
+    title: 'Transaction History Is Empty'
+};
+
 export const WEB3_ERROR = {
     img: metamaskPath,
     title: 'Account Loading Error',

@@ -6,7 +6,7 @@ import {Divider, Grid} from 'semantic-ui-react';
 import * as actionCreators from '../../actions/token';
 import Account from '../../components/account/account';
 import History from '../../components/history/history';
-import ErrorComponent from '../../components/error/error-component';
+import FullScreenError from '../../components/error/fullscreen/full-screen';
 import './wallet.css';
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -56,7 +56,7 @@ export default class WalletPage extends Component {
         const {error} = this.props.accountState;
 
         return (
-            <ErrorComponent
+            <FullScreenError
                 payload={error}
             />
         );

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import './error-component.css';
+import './full-screen.css';
 
-export default class ErrorComponent extends Component {
+export default class FullScreenError extends Component {
 
     static propTypes = {
         payload: PropTypes.shape({
+            img: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
             description: PropTypes.string.isRequired
         }).isRequired

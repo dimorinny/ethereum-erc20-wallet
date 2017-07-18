@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {Table, Label} from 'semantic-ui-react';
+import SmallError from '../error/small/small';
 import {transactionLink, addressLink} from '../../util/etherscan';
+import {EMPTY_TRANSACTION_HISTORY} from '../../error/type';
 import './history.css';
 
 export default class History extends Component {
@@ -21,7 +23,19 @@ export default class History extends Component {
     };
 
     render() {
-        return this.renderContent();
+        let historyView;
+
+        if (history.length == 0) {
+            historyView = History.renderEmpty();
+        } else {
+            historyView = this.renderContent();
+        }
+
+        return (
+            <div>
+                {historyView}
+            </div>
+        );
     };
 
     renderContent() {
@@ -44,6 +58,16 @@ export default class History extends Component {
                         {history.map((item) => History.renderTransaction(item))}
                     </Table.Body>
                 </Table>
+            </div>
+        );
+    };
+
+    static renderEmpty() {
+        return (
+            <div>
+                <SmallError
+                    className="transaction_history_empty_error"
+                    payload={EMPTY_TRANSACTION_HISTORY}/>
             </div>
         );
     };
