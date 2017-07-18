@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Divider, Grid} from 'semantic-ui-react';
+import {Divider, Grid, Dimmer, Loader} from 'semantic-ui-react';
 import * as actionCreators from '../../actions/token';
 import Account from '../../components/account/account';
 import History from '../../components/history/history';
@@ -48,7 +48,9 @@ export default class WalletPage extends Component {
 
     static renderProgress() {
         return (
-            <h3>Progress...</h3>
+            <Dimmer active inverted>
+                <Loader size='huge'>Loading</Loader>
+            </Dimmer>
         );
     };
 
