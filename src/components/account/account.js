@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Grid, Segment, Button, Icon} from 'semantic-ui-react';
+import {Grid, Segment, Button, Icon, Popup} from 'semantic-ui-react';
+import Send from '../send/send';
 import {addressLink} from '../../util/etherscan';
 import './account.css';
 
@@ -44,13 +45,23 @@ export default class Account extends Component {
                                     balance.toNumber()
                                 )
                             }
-                            <Button
-                                basic
-                                disabled={balance.toNumber() === 0}
-                                className='account_send_button'
-                                color='black'>
-                                <Icon name='send'/> Send Tokens
-                            </Button>
+                            <Popup
+                                trigger={
+                                    <Button
+                                        basic
+                                        className='account_send_button'
+                                        color='black'>
+                                        Send Tokens <Icon name='caret down'/>
+                                    </Button>
+                                }
+                                content={
+                                    <div>
+                                        <Send/>
+                                    </div>
+                                }
+                                position='bottom left'
+                                on='click'
+                            />
                         </Grid.Column>
                         <Grid.Column>
                             {

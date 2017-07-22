@@ -1,0 +1,15 @@
+.send_container {
+    margin: 12px;
+}
+
+.send_space {
+    height: 12px;
+}
+
+.send_input {
+    width: 350px !important;
+}
+
+.send_input_short {
+    width: 295px !important;
+}

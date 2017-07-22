@@ -11,3 +11,15 @@ body {
     font-family: 'Roboto Thin';
     src: url('../static/font/roboto/Roboto-Thin.ttf');
 }
+
+.left {
+    float: left !important;
+}
+
+.right {
+    float: right !important;
+}
+
+.clear {
+    clear: both;
+}
