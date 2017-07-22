@@ -23,3 +23,11 @@ body {
 .clear {
     clear: both;
 }
+
+.space {
+    height: 12px;
+}
+
+.space_medium {
+    height: 18px;
+}

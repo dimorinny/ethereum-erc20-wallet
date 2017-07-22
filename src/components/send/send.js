@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Form, Input, Button, Icon} from 'semantic-ui-react';
+import {Form, Input, Button, Icon, Header} from 'semantic-ui-react';
 import './send.css';
 
 export default class Send extends Component {
@@ -10,13 +10,14 @@ export default class Send extends Component {
     render() {
         return (
             <div className='send_container'>
+                <Header size='medium'>Send Tokens</Header>
                 <Form>
                     <Form.Field>
                         <Input
                             className='send_input'
                             placeholder='Address'
                         />
-                        <div className='send_space'/>
+                        <div className='space'/>
                         <div>
                             <Input
                                 className='send_input_short left'
@@ -29,7 +30,7 @@ export default class Send extends Component {
                             />
                             <div className='clear'/>
                         </div>
-                        <div className='send_space'/>
+                        <div className='space_medium'/>
                         <Button
                             basic
                             color='black'>
