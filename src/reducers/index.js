@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
 import {routerReducer as routing} from 'react-router-redux';
+import {reducer as form} from 'redux-form';
 import account from './account';
-import input from './input';
 
 export default combineReducers({
     account,
-    input,
+    form,
     routing
 });

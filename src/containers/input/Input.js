@@ -1,23 +1,27 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
+import {reduxForm, formValueSelector, Field} from 'redux-form';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as actionCreators from '../../actions/token';
-import {Input, Form} from 'semantic-ui-react';
+import {Form} from 'semantic-ui-react';
 import ethereumPath from '../../../static/img/ethereum.png';
 import './input.css';
 
-@connect(mapStateToProps, mapDispatchToProps)
+const FORM_NAME = 'input';
+
+@connect(mapStateToProps)
+@reduxForm({
+    form: FORM_NAME,
+    destroyOnUnmount: false
+})
 export default class InputPage extends Component {
 
     static propTypes = {
-        input: PropTypes.shape({
-            text: PropTypes.string.isRequired
-        })
+        router: PropTypes.object.isRequired,
+        inputText: PropTypes.string.isRequired
     };
 
     render() {
-        const {input: {text}, actions} = this.props;
+        const {router, inputText} = this.props;
 
         return (
             <div className='input_container'>
@@ -26,15 +30,17 @@ export default class InputPage extends Component {
                     <img className='input_header_image' src={ethereumPath}/>
                 </div>
 
-                <Form onSubmit={() => this.props.router.push(text)}>
+
+                <Form onSubmit={() => router.push(inputText)}>
                     <Form.Field>
-                        <Input
-                            size='massive'
-                            placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C77...'
-                            className='input_field'
-                            value={text}
-                            onChange={(_, {value}) => actions.inputTextChanged(value)}
-                        />
+                        <div className='ui massive input input_field'>
+                            <Field
+                                name="input"
+                                component="input"
+                                placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C77...'
+                                type="text"
+                            />
+                        </div>
                     </Form.Field>
                 </Form>
             </div>
@@ -43,13 +49,8 @@ export default class InputPage extends Component {
 }
 
 function mapStateToProps(state) {
+    const selector = formValueSelector(FORM_NAME);
     return {
-        input: state.input
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(actionCreators, dispatch)
+        inputText: selector(state, 'input')
     };
 }
