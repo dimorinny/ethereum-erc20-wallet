@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Form, Input, Button, Icon, Header} from 'semantic-ui-react';
+import {reduxForm, Field} from 'redux-form';
+import {Form, Button, Icon, Header} from 'semantic-ui-react';
 import './send.css';
 
+const FORM_NAME = 'send';
+
+@reduxForm({
+    form: FORM_NAME,
+    destroyOnUnmount: false
+})
 export default class Send extends Component {
 
     static propTypes = {};
@@ -13,16 +20,24 @@ export default class Send extends Component {
                 <Header size='medium'>Send Tokens</Header>
                 <Form>
                     <Form.Field>
-                        <Input
-                            className='send_input'
-                            placeholder='Address'
-                        />
+                        <div className='ui input send_input'>
+                            <Field
+                                name="address"
+                                component="input"
+                                placeholder='Address'
+                                type="text"
+                            />
+                        </div>
                         <div className='space'/>
                         <div>
-                            <Input
-                                className='send_input_short left'
-                                placeholder='Value'
-                            />
+                            <div className='ui input send_input_short left'>
+                                <Field
+                                    name="value"
+                                    component="input"
+                                    placeholder='Value'
+                                    type="text"
+                                />
+                            </div>
                             <Button
                                 className='right'
                                 color='green'
@@ -31,11 +46,11 @@ export default class Send extends Component {
                             <div className='clear'/>
                         </div>
                         <div className='space_medium'/>
-                        <Button
+                        <Form.Button
                             basic
                             color='black'>
                             <Icon name='send'/> Send
-                        </Button>
+                        </Form.Button>
                     </Form.Field>
                 </Form>
             </div>
