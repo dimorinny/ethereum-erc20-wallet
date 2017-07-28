@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {Grid, Segment, Button, Icon, Popup} from 'semantic-ui-react';
-import Send from '../send/send';
+import Send from '../../containers/send/send';
 import {addressLink} from '../../util/etherscan';
 import './account.css';
 
@@ -56,7 +56,9 @@ export default class Account extends Component {
                                 }
                                 content={
                                     <div>
-                                        <Send/>
+                                        <Send
+                                            account={this.props.account}
+                                        />
                                     </div>
                                 }
                                 position='bottom left'
