@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
-import {reduxForm, formValueSelector, Field} from 'redux-form';
+import {reduxForm, change, formValueSelector, Field} from 'redux-form';
 import {bindActionCreators} from 'redux';
 import {Form, Button, Icon, Header} from 'semantic-ui-react';
 import * as actionCreators from '../../actions/token';
@@ -24,12 +24,18 @@ export default class Send extends Component {
             symbol: PropTypes.string,
             totalSupply: PropTypes.object,
         }),
+        changeFieldValue: PropTypes.func.isRequired,
         address: PropTypes.string,
-        value: PropTypes.string,
+        value: PropTypes.number,
     };
 
     render() {
-        const {account, address, value} = this.props;
+        const {
+            account,
+            address,
+            value,
+            changeFieldValue
+        } = this.props;
 
         return (
             <div className='send_container'>
@@ -58,6 +64,12 @@ export default class Send extends Component {
                                 className='right'
                                 color='green'
                                 icon='angle double up'
+                                onClick={() => {
+                                    changeFieldValue(
+                                        'value',
+                                        String(account.balance)
+                                    );
+                                }}
                             />
                             <div className='clear'/>
                         </div>
@@ -77,7 +89,7 @@ export default class Send extends Component {
     // TODO: validate address
     validateAddress() {
         return null;
-    }
+    };
 
     validateValue() {
         const {account, value} = this.props;
@@ -87,11 +99,11 @@ export default class Send extends Component {
         }
 
         if (value > account.balance.toNumber()) {
-            return 'You do not have enough money';
+            return 'You don\'t have enough money';
         }
 
         return null;
-    }
+    };
 
     validate() {
         const validatedValue = this.validateValue();
@@ -103,11 +115,12 @@ export default class Send extends Component {
                 value: validatedValue
             }
         }
-    }
+    };
 }
 
 function mapStateToProps(state) {
     const selector = formValueSelector(FORM_NAME);
+
     return {
         address: selector(state, 'address') || '',
         value: parseInt(selector(state, 'value')) || undefined
@@ -116,6 +129,15 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(actionCreators, dispatch)
+        actions: bindActionCreators(actionCreators, dispatch),
+        changeFieldValue: (field, value) => {
+            dispatch(
+                change(
+                    FORM_NAME,
+                    field,
+                    value
+                )
+            );
+        }
     };
 }
