@@ -47,9 +47,9 @@ export default class Send extends Component {
                     <Form.Field>
                         <div className='ui input send_input'>
                             <Field
-                                name="address"
+                                name='address'
                                 label='Address'
-                                type="text"
+                                type='text'
                                 component={renderField}
                             />
                         </div>
@@ -57,8 +57,8 @@ export default class Send extends Component {
                         <div>
                             <div className='ui input send_input_short left'>
                                 <Field
-                                    name="value"
-                                    type="number"
+                                    name='value'
+                                    type='number'
                                     label='Value'
                                     component={renderField}
                                 />

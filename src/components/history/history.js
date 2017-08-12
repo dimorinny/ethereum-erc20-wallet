@@ -66,7 +66,7 @@ export default class History extends Component {
         return (
             <div>
                 <SmallError
-                    className="transaction_history_empty_error"
+                    className='transaction_history_empty_error'
                     payload={EMPTY_TRANSACTION_HISTORY}/>
             </div>
         );

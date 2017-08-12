@@ -14,15 +14,15 @@ export default class WalletPage extends Component {
 
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        params: PropTypes.shape({
-            address: PropTypes.string.isRequired,
-        }).isRequired
+        match: PropTypes.shape({
+            params: PropTypes.shape({
+                address: PropTypes.string.isRequired,
+            }).isRequired
+        })
     };
 
     componentDidMount() {
-        const {actions, params} = this.props;
-        const {address} = params;
-
+        const {actions, match: {params: {address}}} = this.props;
         actions.loadAccount(address);
     };
 

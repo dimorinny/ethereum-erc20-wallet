@@ -1,32 +1,19 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as actionCreators from '../actions/token';
+import {Route, Switch} from 'react-router-dom';
+import WalletPage from './wallet/wallet';
+import InputPage from './input/input';
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Application extends Component {
 
-    static propTypes = {
-        children: PropTypes.node.isRequired,
-        actions: PropTypes.object.isRequired,
-    };
-
     render() {
-        const {children} = this.props;
-
         return (
             <div>
-                { children }
+                <Switch>
+                    <Route exact path='/' component={ InputPage }/>
+                    <Route path='/:address' component={ WalletPage }/>
+                </Switch>
             </div>
         );
     };
-}
-
-function mapStateToProps(state) {
-    return {};
-}
-
-function mapDispatchToProps(dispatch) {
-    return {actions: bindActionCreators(actionCreators, dispatch)};
 }

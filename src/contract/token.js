@@ -28,9 +28,6 @@ export function getTransferHistory(contractAddress, key) {
         (instance, address, resolve, reject) => {
             instance.Transfer({[key]: address}, {fromBlock: 0, toBlock: 'latest'})
                 .get((error, items) => {
-                    console.log(error);
-                    console.log(items);
-
                     if (error) {
                         reject(error);
                     } else {

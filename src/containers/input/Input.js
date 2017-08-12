@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {reduxForm, formValueSelector, Field} from 'redux-form';
+import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Form} from 'semantic-ui-react';
 import ethereumPath from '../../../static/img/ethereum.png';
@@ -8,6 +9,7 @@ import './input.css';
 
 const FORM_NAME = 'input';
 
+@withRouter
 @connect(mapStateToProps)
 @reduxForm({
     form: FORM_NAME,
@@ -16,12 +18,12 @@ const FORM_NAME = 'input';
 export default class InputPage extends Component {
 
     static propTypes = {
-        router: PropTypes.object.isRequired,
-        inputText: PropTypes.string.isRequired
+        history: PropTypes.object.isRequired,
+        inputText: PropTypes.string
     };
 
     render() {
-        const {router, inputText} = this.props;
+        const {history, inputText} = this.props;
 
         return (
             <div className='input_container'>
@@ -31,14 +33,14 @@ export default class InputPage extends Component {
                 </div>
 
 
-                <Form onSubmit={() => router.push(inputText)}>
+                <Form onSubmit={() => history.push(inputText)}>
                     <Form.Field>
                         <div className='ui massive input input_field'>
                             <Field
-                                name="input"
-                                component="input"
+                                name='input'
+                                component='input'
                                 placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C77...'
-                                type="text"
+                                type='text'
                             />
                         </div>
                     </Form.Field>
@@ -50,7 +52,9 @@ export default class InputPage extends Component {
 
 function mapStateToProps(state) {
     const selector = formValueSelector(FORM_NAME);
+    console.log(state);
     return {
+        router: state.router,
         inputText: selector(state, 'input')
     };
 }
