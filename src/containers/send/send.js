@@ -9,6 +9,9 @@ import './send.css';
 
 const FORM_NAME = 'send';
 
+const renderField = ({input, label, type, meta: {touched, error}}) =>
+    <input {...input} type={type} placeholder={label}/>;
+
 @connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({
     form: FORM_NAME,
@@ -45,9 +48,9 @@ export default class Send extends Component {
                         <div className='ui input send_input'>
                             <Field
                                 name="address"
-                                component="input"
-                                placeholder='Address'
+                                label='Address'
                                 type="text"
+                                component={renderField}
                             />
                         </div>
                         <div className='space'/>
@@ -55,9 +58,9 @@ export default class Send extends Component {
                             <div className='ui input send_input_short left'>
                                 <Field
                                     name="value"
-                                    component="input"
-                                    placeholder='Value'
                                     type="number"
+                                    label='Value'
+                                    component={renderField}
                                 />
                             </div>
                             <Button
