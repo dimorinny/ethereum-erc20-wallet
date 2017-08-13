@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
-import {reduxForm, change, formValueSelector, Field} from 'redux-form';
+import {reduxForm, change, formValueSelector, Field, SubmissionError} from 'redux-form';
 import {bindActionCreators} from 'redux';
 import {Form, Button, Icon, Header} from 'semantic-ui-react';
 import * as actionCreators from '../../actions/token';
@@ -9,8 +9,23 @@ import './send.css';
 
 const FORM_NAME = 'send';
 
-const renderField = ({input, label, type, meta: {touched, error}}) =>
-    <input {...input} type={type} placeholder={label}/>;
+const renderField = ({input, label, type, meta: {touched, error}}) => (
+    <div>
+        <div className='ui input send_input'>
+            <input {...input} type={type} placeholder={label}/>
+        </div>
+        <p>{error}</p>
+    </div>
+);
+
+const renderShortField = ({input, label, type, meta: {touched, error}}) => (
+    <div>
+        <div className='ui input send_input_short'>
+            <input {...input} type={type} placeholder={label}/>
+        </div>
+        <p>{error}</p>
+    </div>
+);
 
 @connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({
@@ -27,6 +42,7 @@ export default class Send extends Component {
             symbol: PropTypes.string,
             totalSupply: PropTypes.object,
         }),
+        handleSubmit: PropTypes.func.isRequired,
         changeFieldValue: PropTypes.func.isRequired,
         address: PropTypes.string,
         value: PropTypes.number,
@@ -37,30 +53,31 @@ export default class Send extends Component {
             account,
             address,
             value,
+            handleSubmit,
             changeFieldValue
         } = this.props;
 
         return (
             <div className='send_container'>
                 <Header size='medium'>Send Tokens</Header>
-                <Form>
+                <Form onSubmit={
+                    handleSubmit(this.sendFormSubmitted.bind(this))
+                }>
                     <Form.Field>
-                        <div className='ui input send_input'>
-                            <Field
-                                name='address'
-                                label='Address'
-                                type='text'
-                                component={renderField}
-                            />
-                        </div>
+                        <Field
+                            name='address'
+                            label='Address'
+                            type='text'
+                            component={renderField}
+                        />
                         <div className='space'/>
                         <div>
-                            <div className='ui input send_input_short left'>
+                            <div className='left'>
                                 <Field
                                     name='value'
                                     type='number'
                                     label='Value'
-                                    component={renderField}
+                                    component={renderShortField}
                                 />
                             </div>
                             <Button
@@ -79,7 +96,6 @@ export default class Send extends Component {
                         <div className='space_medium'/>
                         <Form.Button
                             basic
-                            disabled={Boolean(this.validate())}
                             color='black'>
                             <Icon name='send'/> Send
                         </Form.Button>
@@ -89,9 +105,19 @@ export default class Send extends Component {
         );
     };
 
+    sendFormSubmitted() {
+        return new Promise((resolve, reject) => {
+            const validation = this.validate();
+
+            if (validation) {
+                throw new SubmissionError(validation);
+            }
+        });
+    }
+
     // TODO: validate address
     validateAddress() {
-        return null;
+        return 'TODO: validate address';
     };
 
     validateValue() {
