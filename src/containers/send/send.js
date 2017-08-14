@@ -4,28 +4,14 @@ import {connect} from 'react-redux';
 import {reduxForm, change, formValueSelector, Field, SubmissionError} from 'redux-form';
 import {bindActionCreators} from 'redux';
 import {Form, Button, Icon, Header} from 'semantic-ui-react';
+import renderField from '../../components/field/field';
 import * as actionCreators from '../../actions/token';
 import './send.css';
 
 const FORM_NAME = 'send';
 
-const renderField = ({input, label, type, meta: {touched, error}}) => (
-    <div>
-        <div className='ui input send_input'>
-            <input {...input} type={type} placeholder={label}/>
-        </div>
-        <p>{error}</p>
-    </div>
-);
-
-const renderShortField = ({input, label, type, meta: {touched, error}}) => (
-    <div>
-        <div className='ui input send_input_short'>
-            <input {...input} type={type} placeholder={label}/>
-        </div>
-        <p>{error}</p>
-    </div>
-);
+const renderCommonField = renderField('send_input_container');
+const renderShortField = renderField('send_input_container_short');
 
 @connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({
@@ -60,15 +46,13 @@ export default class Send extends Component {
         return (
             <div className='send_container'>
                 <Header size='medium'>Send Tokens</Header>
-                <Form onSubmit={
-                    handleSubmit(this.sendFormSubmitted.bind(this))
-                }>
+                <Form onSubmit={handleSubmit(this.sendFormSubmitted.bind(this))}>
                     <Form.Field>
                         <Field
                             name='address'
                             label='Address'
                             type='text'
-                            component={renderField}
+                            component={renderCommonField}
                         />
                         <div className='space'/>
                         <div>

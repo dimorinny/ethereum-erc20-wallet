@@ -2,10 +2,12 @@
     margin: 12px;
 }
 
-.send_input {
+.send_input_container {
+    margin-bottom: 0 !important;
     width: 350px !important;
 }
 
-.send_input_short {
+.send_input_container_short {
+    margin-bottom: 0 !important;
     width: 295px !important;
 }
