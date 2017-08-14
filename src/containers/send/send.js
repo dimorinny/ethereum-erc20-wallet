@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {reduxForm, change, formValueSelector, Field, SubmissionError} from 'redux-form';
 import {bindActionCreators} from 'redux';
 import {Form, Button, Icon, Header} from 'semantic-ui-react';
+import ethereum from 'ethereum-address';
 import renderField from '../../components/field/field';
 import * as actionCreators from '../../actions/token';
 import './send.css';
@@ -37,7 +38,6 @@ export default class Send extends Component {
     render() {
         const {
             account,
-            address,
             value,
             handleSubmit,
             changeFieldValue
@@ -59,7 +59,6 @@ export default class Send extends Component {
                             <div className='left'>
                                 <Field
                                     name='value'
-                                    type='number'
                                     label='Value'
                                     component={renderShortField}
                                 />
@@ -101,21 +100,28 @@ export default class Send extends Component {
 
     // TODO: validate address
     validateAddress() {
-        return 'TODO: validate address';
+        const {address} = this.props;
+
+        if (address == undefined) {
+            return 'You must specify address';
+        }
+
+        if (!ethereum.isAddress(address)) {
+            return 'Invalid address';
+        }
     };
 
+    // TODO: normal value validation
     validateValue() {
         const {account, value} = this.props;
 
-        if (!value) {
-            return 'Invalid money value';
+        if (value == undefined) {
+            return 'You must specify value';
         }
 
         if (value > account.balance.toNumber()) {
             return 'You don\'t have enough money';
         }
-
-        return null;
     };
 
     validate() {
