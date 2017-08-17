@@ -89,16 +89,24 @@ export default class Send extends Component {
     };
 
     sendFormSubmitted() {
+        const {
+            actions,
+            value,
+            address,
+            account: {contractAddress}
+        } = this.props;
+
         return new Promise((resolve, reject) => {
             const validation = this.validate();
 
             if (validation) {
                 throw new SubmissionError(validation);
             }
+
+            actions.send(actions, address, value, contractAddress)
         });
     }
 
-    // TODO: validate address
     validateAddress() {
         const {address} = this.props;
 
@@ -113,15 +121,15 @@ export default class Send extends Component {
 
     // TODO: normal value validation
     validateValue() {
-        const {account, value} = this.props;
-
-        if (value == undefined) {
-            return 'You must specify value';
-        }
-
-        if (value > account.balance.toNumber()) {
-            return 'You don\'t have enough money';
-        }
+        // const {account, value} = this.props;
+        //
+        // if (value == undefined) {
+        //     return 'You must specify value';
+        // }
+        //
+        // if (value > account.balance.toNumber()) {
+        //     return 'You don\'t have enough money';
+        // }
     };
 
     validate() {

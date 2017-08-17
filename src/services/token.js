@@ -1,7 +1,6 @@
 import {executeTokenMethod, getTransferHistory} from '../contract/token';
 
 export function getAccount(contractAddress) {
-
     const scaleFactor = 10000;
 
     let savedAddress;
@@ -114,26 +113,21 @@ export function getAccount(contractAddress) {
         }));
 }
 
-// export function sendMoney(actions, receiver, value) {
-//     let address;
-//
-//     return currentAccount()
-//         .then(account => {
-//             address = account;
-//         })
-//         .then(provideDeployedToken)
-//         .then(instance => instance.sendCoin(receiver, value, {from: address}))
-//         .then(actions.loadAccount);
-// }
-//
-// export function updateBalance(actions) {
-//     let address;
-//
-//     return currentAccount()
-//         .then(account => {
-//             address = account;
-//         })
-//         .then(provideDeployedToken)
-//         .then(instance => instance.updateBalance({from: address}))
-//         .then(actions.loadAccount);
-// }
+export function sendMoney(to, value, contractAddress) {
+    let transferTransactionHash;
+
+    const sendMoney = () => executeTokenMethod(
+        contractAddress,
+        (address, token) => {
+            return callback => token.transfer(to, value, {from: address}, callback)
+        }
+    )
+        .then((tx) => {
+            transferTransactionHash = tx;
+        });
+
+    return sendMoney()
+        .then(() => ({
+            transferTransactionHash: transferTransactionHash
+        }));
+}

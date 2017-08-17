@@ -3,7 +3,7 @@ import {SEND_MONEY} from '../constants';
 
 const SEND_DEFAULT_STATE = {
     isPending: false,
-    success: null,
+    transaction: null,
     error: null
 };
 
@@ -25,7 +25,7 @@ export default typeToReducer({
             ...state,
             isPending: false,
             error: null,
-            success: 'Success'
+            transaction: action.payload
         })
     }
 }, SEND_DEFAULT_STATE);
