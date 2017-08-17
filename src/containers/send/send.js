@@ -3,9 +3,10 @@ import {PropTypes} from 'prop-types';
 import {connect} from 'react-redux';
 import {reduxForm, change, formValueSelector, Field, SubmissionError} from 'redux-form';
 import {bindActionCreators} from 'redux';
-import {Form, Button, Icon, Header} from 'semantic-ui-react';
+import {Form, Button, Icon, Header, Message} from 'semantic-ui-react';
 import ethereum from 'ethereum-address';
 import renderField from '../../components/field/field';
+import {transactionLink} from '../../util/etherscan';
 import * as actionCreators from '../../actions/token';
 import './send.css';
 
@@ -22,6 +23,11 @@ const renderShortField = renderField('send_input_container_short');
 export default class Send extends Component {
 
     static propTypes = {
+        send: PropTypes.shape({
+            isPending: PropTypes.string.isRequired,
+            transaction: PropTypes.string,
+            error: PropTypes.string
+        }),
         account: PropTypes.shape({
             address: PropTypes.string.isRequired,
             contractAddress: PropTypes.string.isRequired,
@@ -40,7 +46,12 @@ export default class Send extends Component {
             account,
             value,
             handleSubmit,
-            changeFieldValue
+            changeFieldValue,
+            send: {
+                isPending,
+                transaction,
+                error
+            }
         } = this.props;
 
         return (
@@ -52,6 +63,7 @@ export default class Send extends Component {
                             name='address'
                             label='Address'
                             type='text'
+                            disabled={isPending}
                             component={renderCommonField}
                         />
                         <div className='space'/>
@@ -60,12 +72,14 @@ export default class Send extends Component {
                                 <Field
                                     name='value'
                                     label='Value'
+                                    disabled={isPending}
                                     component={renderShortField}
                                 />
                             </div>
                             <Button
                                 className='right'
                                 color='green'
+                                disabled={isPending}
                                 icon='angle double up'
                                 onClick={() => {
                                     changeFieldValue(
@@ -79,11 +93,13 @@ export default class Send extends Component {
                         <div className='space_medium'/>
                         <Form.Button
                             basic
+                            loading={isPending}
                             color='black'>
                             <Icon name='send'/> Send
                         </Form.Button>
                     </Form.Field>
                 </Form>
+                {this.getSendInfoStatus()}
             </div>
         );
     };
@@ -103,8 +119,37 @@ export default class Send extends Component {
                 throw new SubmissionError(validation);
             }
 
-            actions.send(actions, address, value, contractAddress)
+            actions.send(address, value, contractAddress)
         });
+    }
+
+    getSendInfoStatus() {
+        const {send: {isPending, transaction, error}} = this.props;
+
+        // TODO: normal success title
+        if (transaction) {
+            return <Message
+                success
+                header='Your user registration was successful'
+                content={
+                    <a
+                        target='_blank'
+                        href={transactionLink(transaction)}
+                    >
+                        {`${transaction.substring(0, 42)}...`}
+                    </a>
+                }
+            />
+        }
+
+        // TODO: normal error title
+        if (error) {
+            return <Message
+                negative
+                header='Your user registration was successful'
+                content={error}
+            />
+        }
     }
 
     validateAddress() {
@@ -149,6 +194,7 @@ function mapStateToProps(state) {
     const selector = formValueSelector(FORM_NAME);
 
     return {
+        send: state.send,
         address: selector(state, 'address') || '',
         value: parseInt(selector(state, 'value')) || undefined
     };

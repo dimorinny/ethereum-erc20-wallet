@@ -25,7 +25,7 @@ export default typeToReducer({
             ...state,
             isPending: false,
             error: null,
-            transaction: action.payload
+            transaction: action.payload.transferTransactionHash
         })
     }
 }, SEND_DEFAULT_STATE);
