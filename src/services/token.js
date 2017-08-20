@@ -1,8 +1,6 @@
 import {executeTokenMethod, getTransferHistory} from '../contract/token';
 
 export function getAccount(contractAddress) {
-    const scaleFactor = 10000;
-
     let savedAddress;
     let savedBalance;
     let savedSymbol;
@@ -20,7 +18,7 @@ export function getAccount(contractAddress) {
             return callback => token.balanceOf.call(address, callback);
         }
     )
-        .then((value) => value.div(scaleFactor))
+        .then((value) => value.div(savedDecimals))
         .then(balance => {
             savedBalance = balance;
         });
@@ -96,9 +94,9 @@ export function getAccount(contractAddress) {
             .sort((first, second) => second.blockNumber - first.blockNumber);
     };
 
-    return loadBalance()
+    return loadDecimals()
         .then(loadSymbol)
-        .then(loadDecimals)
+        .then(loadBalance)
         .then(loadTotalSupply)
         .then(loadIncomingHistory)
         .then(loadOutcomingHistory)
@@ -107,19 +105,20 @@ export function getAccount(contractAddress) {
             address: savedAddress,
             contractAddress: contractAddress,
             balance: savedBalance,
+            decimals: savedDecimals,
             symbol: savedSymbol,
             totalSupply: savedTotalSupply,
             history: history
         }));
 }
 
-export function sendMoney(to, value, contractAddress) {
+export function sendMoney(to, value, decimals, contractAddress) {
     let transferTransactionHash;
 
     const sendMoney = () => executeTokenMethod(
         contractAddress,
         (address, token) => {
-            return callback => token.transfer(to, value, {from: address}, callback)
+            return callback => token.transfer(to, value * decimals, {from: address}, callback)
         }
     )
         .then((tx) => {

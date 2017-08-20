@@ -12,6 +12,7 @@ export default class Account extends Component {
             address: PropTypes.string.isRequired,
             contractAddress: PropTypes.string.isRequired,
             balance: PropTypes.object.isRequired,
+            decimals: PropTypes.number.isRequired,
             symbol: PropTypes.string,
             totalSupply: PropTypes.object,
         })

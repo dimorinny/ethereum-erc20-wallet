@@ -32,6 +32,7 @@ export default class Send extends Component {
             address: PropTypes.string.isRequired,
             contractAddress: PropTypes.string.isRequired,
             balance: PropTypes.object.isRequired,
+            decimals: PropTypes.number.isRequired,
             symbol: PropTypes.string,
             totalSupply: PropTypes.object,
         }),
@@ -109,7 +110,7 @@ export default class Send extends Component {
             actions,
             value,
             address,
-            account: {contractAddress}
+            account: {contractAddress, decimals}
         } = this.props;
 
         return new Promise((resolve, reject) => {
@@ -120,7 +121,7 @@ export default class Send extends Component {
             }
 
             try {
-                resolve(actions.send(address, value, contractAddress));
+                resolve(actions.send(address, value, decimals, contractAddress));
             } catch(e) {
                 reject(e);
             }
@@ -128,7 +129,7 @@ export default class Send extends Component {
     }
 
     getSendInfoStatus() {
-        const {send: {isPending, transaction, error}} = this.props;
+        const {send: {transaction, error}} = this.props;
 
         if (transaction) {
             return <Message
@@ -168,8 +169,6 @@ export default class Send extends Component {
 
     validateValue() {
         const {account, value} = this.props;
-
-        console.log(value);
 
         if (value == undefined) {
             return 'You must specify value';
