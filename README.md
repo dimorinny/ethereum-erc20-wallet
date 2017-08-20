@@ -1,12 +1,6 @@
-<style>
-	.logo {
-		margin: 90px 0px;
-	}
-</style>
-
-<div class="logo" align="center">
-	<img height="180px" src="https://raw.githubusercontent.com/dimorinny/ethereum-erc20-wallet/master/art/logo.png">
-</div>
+<center>
+	<img height="300px" src="/Users/damerkurev/Desktop/logo.png">
+</center>
 
 This is Ethereum **ERC20** compatible tokens web wallet, that uses Metamask or Mist project for communication with Ethereum network. With this wallet you may:
 
