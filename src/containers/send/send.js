@@ -24,7 +24,7 @@ export default class Send extends Component {
 
     static propTypes = {
         send: PropTypes.shape({
-            isPending: PropTypes.string.isRequired,
+            isPending: PropTypes.bool.isRequired,
             transaction: PropTypes.string,
             error: PropTypes.string
         }),
@@ -119,18 +119,21 @@ export default class Send extends Component {
                 throw new SubmissionError(validation);
             }
 
-            actions.send(address, value, contractAddress)
+            try {
+                resolve(actions.send(address, value, contractAddress));
+            } catch(e) {
+                reject(e);
+            }
         });
     }
 
     getSendInfoStatus() {
         const {send: {isPending, transaction, error}} = this.props;
 
-        // TODO: normal success title
         if (transaction) {
             return <Message
                 success
-                header='Your user registration was successful'
+                header='Your transaction is created'
                 content={
                     <a
                         target='_blank'
@@ -142,13 +145,12 @@ export default class Send extends Component {
             />
         }
 
-        // TODO: normal error title
         if (error) {
             return <Message
                 negative
-                header='Your user registration was successful'
-                content={error}
-            />
+                header='Your transaction is not created'
+                content='Something wrong with client or node'
+            />;
         }
     }
 
@@ -164,17 +166,18 @@ export default class Send extends Component {
         }
     };
 
-    // TODO: normal value validation
     validateValue() {
-        // const {account, value} = this.props;
-        //
-        // if (value == undefined) {
-        //     return 'You must specify value';
-        // }
-        //
-        // if (value > account.balance.toNumber()) {
-        //     return 'You don\'t have enough money';
-        // }
+        const {account, value} = this.props;
+
+        console.log(value);
+
+        if (value == undefined) {
+            return 'You must specify value';
+        }
+
+        if (value > account.balance.toNumber()) {
+            return 'You don\'t have enough money';
+        }
     };
 
     validate() {
@@ -196,7 +199,7 @@ function mapStateToProps(state) {
     return {
         send: state.send,
         address: selector(state, 'address') || '',
-        value: parseInt(selector(state, 'value')) || undefined
+        value: parseFloat(selector(state, 'value')) || undefined
     };
 }
 

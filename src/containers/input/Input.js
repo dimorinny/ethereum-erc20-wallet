@@ -52,7 +52,6 @@ export default class InputPage extends Component {
 
 function mapStateToProps(state) {
     const selector = formValueSelector(FORM_NAME);
-    console.log(state);
     return {
         router: state.router,
         inputText: selector(state, 'input')

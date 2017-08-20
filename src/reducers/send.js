@@ -18,7 +18,7 @@ export default typeToReducer({
         REJECTED: (state, action) => ({
             ...state,
             isPending: false,
-            error: 'Send coin error',
+            error: action.payload,
             success: null
         }),
         FULFILLED: (state, action) => ({
