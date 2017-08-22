@@ -8,4 +8,4 @@ This is Ethereum **ERC20** compatible tokens web wallet, that uses Metamask or M
 * Get account information (balance, transactions history)
 * Send tokens to another wallet
 
-Try now: <a href="http://erc20.xyz" target="_blank">http://erc20.xyz</a>
+Try now: [http://erc20.xyz](http://erc20.xyz)
