@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -61,7 +62,8 @@ const prodPlugins = [
             warnings: false,
             drop_console: true
         }
-    })
+    }),
+    new FaviconsWebpackPlugin('./static/img/favicon.png')
 ];
 
 const babelLoaders = baseBabelLoaders
@@ -86,7 +88,10 @@ module.exports = {
             test: /\.js$/,
             use: ['react-hot-loader/webpack', 'babel-loader'],
             exclude: '/node_modules/',
-            include: path.join(__dirname, 'src')
+            include: [
+                path.join(__dirname, 'node_modules/ethereum-address'),
+                path.join(__dirname, 'src')
+            ]
         }, {
             test: /\.css$/,
             use: ['style-loader', 'css-loader', 'postcss-loader'],
