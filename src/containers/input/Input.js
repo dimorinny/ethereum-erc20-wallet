@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
 import {reduxForm, formValueSelector, Field} from 'redux-form';
+import {Icon} from 'semantic-ui-react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Form} from 'semantic-ui-react';
@@ -45,6 +46,18 @@ export default class InputPage extends Component {
                         </div>
                     </Form.Field>
                 </Form>
+
+                <a
+                    className='github_link'
+                    target='_blank'
+                    href='https://github.com/dimorinny/ethereum-erc20-wallet'
+                >
+                    <Icon
+                        color='grey'
+                        name='github'
+                        size='big'
+                    />
+                </a>
             </div>
         );
     };

@@ -21,3 +21,8 @@
     width: 600px;
     margin-top: 24px;
 }
+
+.github_link {
+    float: right !important;
+    margin-top: 10px !important;
+}

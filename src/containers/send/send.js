@@ -158,7 +158,7 @@ export default class Send extends Component {
     validateAddress() {
         const {address} = this.props;
 
-        if (address == undefined) {
+        if (!address) {
             return 'You must specify address';
         }
 
@@ -170,7 +170,7 @@ export default class Send extends Component {
     validateValue() {
         const {account, value} = this.props;
 
-        if (value == undefined) {
+        if (value === undefined) {
             return 'You must specify value';
         }
 
