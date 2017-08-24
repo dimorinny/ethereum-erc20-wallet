@@ -9,3 +9,9 @@ This is Ethereum **ERC20** compatible tokens web wallet, that uses Metamask or M
 * Send tokens to another wallet
 
 Try now: [http://erc20.xyz](http://erc20.xyz)
+
+You can run your local wallet using this command:
+
+```
+docker run -p 80:80 dimorinny/ethereum-erc20-wallet
+```
