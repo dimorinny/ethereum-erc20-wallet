@@ -8,7 +8,7 @@ This is Ethereum **ERC20** compatible tokens web wallet, that uses Metamask or M
 * Get account information (balance, transactions history)
 * Send tokens to another wallet
 
-Try now: [http://erc20.xyz](http://erc20.xyz)
+Try now: [https://dimorinny.github.io/ethereum-erc20-wallet/](https://dimorinny.github.io/ethereum-erc20-wallet/)
 
 You can run your local wallet using this command:
 
