@@ -8,7 +8,7 @@ const basePlugins = [
     new webpack.DefinePlugin({
         __DEV__: process.env.NODE_ENV !== 'production',
         __PRODUCTION__: process.env.NODE_ENV === 'production',
-        __BASE__: JSON.stringify(process.env.BASE || 'http://localhost:3000'),
+        __BASE__: JSON.stringify(process.env.BASE),
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
     new HtmlWebpackPlugin({

@@ -5,6 +5,7 @@
     "scripts": {
         "lint": "eslint src",
         "build": "cross-env NODE_ENV=production webpack",
+        "build-gh-pages": "cross-env NODE_ENV=production BASE=/ethereum-erc20-wallet/ webpack",
         "dev": "cross-env NODE_ENV=development node server.js"
     },
     "author": "Merkurev Dmitry",
