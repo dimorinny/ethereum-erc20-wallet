@@ -11,10 +11,10 @@ export default class Account extends Component {
         account: PropTypes.shape({
             address: PropTypes.string.isRequired,
             contractAddress: PropTypes.string.isRequired,
-            balance: PropTypes.object.isRequired,
+            balance: PropTypes.number.isRequired,
             decimals: PropTypes.number.isRequired,
             symbol: PropTypes.string,
-            totalSupply: PropTypes.object,
+            totalSupply: PropTypes.number,
         })
     };
 
@@ -43,7 +43,7 @@ export default class Account extends Component {
                                 Account.renderTextItem(
                                     'money',
                                     'Balance',
-                                    balance.toNumber()
+                                    balance
                                 )
                             }
                             <Popup
@@ -85,7 +85,7 @@ export default class Account extends Component {
                                 Account.renderTextItem(
                                     'archive',
                                     'TotalSupply',
-                                    totalSupply.toFormat(0)
+                                    totalSupply
                                 )
                             }
                         </Grid.Column>

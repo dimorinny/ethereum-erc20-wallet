@@ -16,8 +16,7 @@ export default class History extends Component {
                 from: PropTypes.string.isRequired,
                 to: PropTypes.string.isRequired,
                 transactionHash: PropTypes.string.isRequired,
-                type: PropTypes.string.isRequired,
-                value: PropTypes.object.isRequired
+                value: PropTypes.number.isRequired
             })
         ).isRequired
     };
@@ -25,7 +24,7 @@ export default class History extends Component {
     render() {
         let historyView;
 
-        if (history.length == 0) {
+        if (history.length === 0) {
             historyView = History.renderEmpty();
         } else {
             historyView = this.renderContent();
@@ -55,7 +54,7 @@ export default class History extends Component {
                     </Table.Header>
 
                     <Table.Body>
-                        {history.map((item) => History.renderTransaction(item))}
+                        {history.map(item => History.renderTransaction(item))}
                     </Table.Body>
                 </Table>
             </div>
@@ -108,14 +107,14 @@ export default class History extends Component {
                     }
                 </Table.Cell>
                 <Table.Cell>
-                    {transaction.value.toNumber()}
+                    {transaction.value}
                 </Table.Cell>
             </Table.Row>
         );
     };
 
     static transactionColor({direction}) {
-        if (direction == 'In') {
+        if (direction === 'In') {
             return 'green';
         } else {
             return 'red';

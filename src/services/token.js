@@ -7,90 +7,69 @@ export function getAccount(contractAddress) {
     let savedDecimals;
     let savedTotalSupply;
 
-    let incomingHistory;
-    let outcomingHistory;
+    let inHistory;
+    let outHistory;
     let history;
+
+    const loadDecimals = () => executeTokenMethod(
+        contractAddress,
+        (address, token) => callback => token.methods.decimals().call({from: address}, callback)
+    )
+        .then(decimals => Number.parseInt(decimals))
+        .then(decimals => savedDecimals = Math.pow(10, decimals));
 
     const loadBalance = () => executeTokenMethod(
         contractAddress,
         (address, token) => {
             savedAddress = address;
-            return callback => token.balanceOf.call(address, callback);
+            return callback => token.methods.balanceOf(address).call({from: address}, callback);
         }
     )
-        .then((value) => value.div(savedDecimals))
-        .then(balance => {
-            savedBalance = balance;
-        });
+        .then(value => Number.parseInt(value))
+        .then(value => value / savedDecimals)
+        .then(balance => savedBalance = balance);
 
     const loadSymbol = () => executeTokenMethod(
         contractAddress,
-        (_, token) => {
-            return callback => token.symbol.call(callback);
-        }
+        (address, token) => callback => token.methods.symbol().call({from: address}, callback)
     )
-        .then((symbol) => {
-            savedSymbol = symbol;
-        })
-        .catch(() => {
-        });
-
-    const loadDecimals = () => executeTokenMethod(
-        contractAddress,
-        (_, token) => {
-            return callback => token.decimals.call(callback);
-        }
-    )
-        .then((decimals) => {
-            savedDecimals = Math.pow(10, decimals.toNumber());
-        })
-        .catch(() => {
-            savedDecimals = 1;
-        });
+        .then(symbol => savedSymbol = symbol);
 
     const loadTotalSupply = () => executeTokenMethod(
         contractAddress,
-        (_, token) => {
-            return callback => token.totalSupply.call(callback);
-        }
+        (address, token) => callback => token.methods.totalSupply().call({from: address}, callback)
     )
-        .then((totalSupply) => totalSupply.div(savedDecimals))
-        .then((number) => {
-            savedTotalSupply = number;
-        });
+        .then(totalSupply => Number.parseInt(totalSupply))
+        .then(totalSupply => totalSupply / savedDecimals)
+        .then(number => savedTotalSupply = number);
 
     const mapHistoryItem = (item, direction) => ({
         blockHash: item.blockHash,
         blockNumber: item.blockNumber,
         transactionHash: item.transactionHash,
-        type: item.type,
         direction: direction,
-        from: item.args._from,
-        to: item.args._to,
-        value: item.args._value.div(savedDecimals)
+        from: item.returnValues._from,
+        to: item.returnValues._to,
+        value: Number.parseInt(item.returnValues._value) / savedDecimals
     });
 
-    const loadIncomingHistory = () => getTransferHistory(
+    const loadInHistory = () => getTransferHistory(
         contractAddress,
         '_to'
     )
-        .then((items) => items.map((item) => mapHistoryItem(item, 'In')))
-        .then((items) => {
-            incomingHistory = items;
-        });
+        .then(items => items.map(item => mapHistoryItem(item, 'In')))
+        .then(items => inHistory = items);
 
-    const loadOutcomingHistory = () => getTransferHistory(
+    const loadOutHistory = () => getTransferHistory(
         contractAddress,
         '_from'
     )
-        .then((items) => items.map((item) => mapHistoryItem(item, 'Out')))
-        .then((items) => {
-            outcomingHistory = items;
-        });
+        .then(items => items.map(item => mapHistoryItem(item, 'Out')))
+        .then(items => outHistory = items);
 
     const combineHistory = () => {
-        history = incomingHistory
-            .concat(outcomingHistory)
+        history = inHistory
+            .concat(outHistory)
             .sort((first, second) => second.blockNumber - first.blockNumber);
     };
 
@@ -98,8 +77,8 @@ export function getAccount(contractAddress) {
         .then(loadSymbol)
         .then(loadBalance)
         .then(loadTotalSupply)
-        .then(loadIncomingHistory)
-        .then(loadOutcomingHistory)
+        .then(loadInHistory)
+        .then(loadOutHistory)
         .then(combineHistory)
         .then(() => ({
             address: savedAddress,
@@ -117,13 +96,9 @@ export function sendMoney(to, value, decimals, contractAddress) {
 
     const sendMoney = () => executeTokenMethod(
         contractAddress,
-        (address, token) => {
-            return callback => token.transfer(to, value * decimals, {from: address}, callback)
-        }
+        (address, token) => callback => token.methods.transfer(to, value * decimals, {from: address}, callback)
     )
-        .then((tx) => {
-            transferTransactionHash = tx;
-        });
+        .then(tx => transferTransactionHash = tx);
 
     return sendMoney()
         .then(() => ({

@@ -10,9 +10,7 @@ function _provideToken(web3, address) {
     }
 
     _cachedAddress = address;
-    _cachedToken = web3.eth
-        .contract(abi)
-        .at(address);
+    _cachedToken = new web3.eth.Contract(abi, address);
 
     return _cachedToken;
 }
@@ -26,14 +24,13 @@ export function getTransferHistory(contractAddress, key) {
     return tokenMethod(
         contractAddress,
         (instance, address, resolve, reject) => {
-            instance.Transfer({[key]: address}, {fromBlock: 0, toBlock: 'latest'})
-                .get((error, items) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(items);
-                    }
-                });
+            instance.getPastEvents('Transfer', {
+                filter: {[key]: address},
+                fromBlock: 0,
+                toBlock: 'latest'
+            })
+                .then(data => resolve(data))
+                .catch(error => reject(error));
         }
     );
 }
@@ -61,9 +58,7 @@ function tokenMethod(contractAddress, method) {
             address = account;
         })
         .then(() => provideToken(contractAddress))
-        .then(instance => {
-            return new Promise((resolve, reject) => {
-                method(instance, address, resolve, reject);
-            });
-        });
+        .then(instance => new Promise(
+            (resolve, reject) => method(instance, address, resolve, reject))
+        );
 }
