@@ -44,6 +44,8 @@ export default class Account extends Component {
                                     'money',
                                     'Balance',
                                     balance
+                                        .toFixed(3)
+                                        .toLocaleString()
                                 )
                             }
                             <Popup
@@ -85,7 +87,7 @@ export default class Account extends Component {
                                 Account.renderTextItem(
                                     'archive',
                                     'TotalSupply',
-                                    totalSupply
+                                    totalSupply.toLocaleString()
                                 )
                             }
                         </Grid.Column>

@@ -55,6 +55,10 @@ function tokenMethod(contractAddress, method) {
 
     return currentAccount()
         .then(account => {
+            if (!account) {
+                throw Error('Error while getting address')
+            }
+
             address = account;
         })
         .then(() => provideToken(contractAddress))

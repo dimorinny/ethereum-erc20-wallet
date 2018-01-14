@@ -66,7 +66,7 @@ export default class WalletPage extends Component {
 
     renderWallet() {
         const {account} = this.props.accountState;
-        const {history} = account;
+        // const {history} = account;
 
         return (
             <Grid columns='equal'>
@@ -83,9 +83,9 @@ export default class WalletPage extends Component {
                         Transaction History
                     </Divider>
 
-                    <History
-                        history={history}
-                    />
+                    {/*<History*/}
+                        {/*history={history}*/}
+                    {/*/>*/}
                 </Grid.Column>
                 <Grid.Column/>
             </Grid>

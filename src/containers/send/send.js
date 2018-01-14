@@ -36,7 +36,6 @@ export default class Send extends Component {
             symbol: PropTypes.string,
             totalSupply: PropTypes.number,
         }),
-        handleSubmit: PropTypes.func.isRequired,
         changeFieldValue: PropTypes.func.isRequired,
         address: PropTypes.string,
         value: PropTypes.number,
@@ -45,20 +44,16 @@ export default class Send extends Component {
     render() {
         const {
             account,
-            value,
-            handleSubmit,
             changeFieldValue,
             send: {
-                isPending,
-                transaction,
-                error
+                isPending
             }
         } = this.props;
 
         return (
             <div className='send_container'>
                 <Header size='medium'>Send Tokens</Header>
-                <Form onSubmit={handleSubmit(this.sendFormSubmitted.bind(this))}>
+                <Form onSubmit={this.sendFormSubmitted.bind(this)}>
                     <Form.Field>
                         <Field
                             name='address'
@@ -174,7 +169,7 @@ export default class Send extends Component {
             return 'You must specify value';
         }
 
-        if (value > account.balance.toNumber()) {
+        if (value > account.balance) {
             return 'You don\'t have enough money';
         }
     };

@@ -77,9 +77,9 @@ export function getAccount(contractAddress) {
         .then(loadSymbol)
         .then(loadBalance)
         .then(loadTotalSupply)
-        .then(loadInHistory)
-        .then(loadOutHistory)
-        .then(combineHistory)
+        // .then(loadInHistory)
+        // .then(loadOutHistory)
+        // .then(combineHistory)
         .then(() => ({
             address: savedAddress,
             contractAddress: contractAddress,
@@ -96,9 +96,10 @@ export function sendMoney(to, value, decimals, contractAddress) {
 
     const sendMoney = () => executeTokenMethod(
         contractAddress,
-        (address, token) => callback => token.methods.transfer(to, value * decimals, {from: address}, callback)
+        (address, token) => callback => token.methods.transfer(to, value * decimals).send({from: address}, callback)
     )
-        .then(tx => transferTransactionHash = tx);
+        .then(tx => transferTransactionHash = tx)
+        .catch(() => console.log('Error during sending money'));
 
     return sendMoney()
         .then(() => ({
