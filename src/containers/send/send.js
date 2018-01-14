@@ -75,6 +75,7 @@ export default class Send extends Component {
                             <Button
                                 className='right'
                                 color='green'
+                                type='button'
                                 disabled={isPending}
                                 icon='angle double up'
                                 onClick={() => {
