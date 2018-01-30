@@ -1,15 +1,11 @@
 import {executeTokenMethod, getTransferHistory} from '../contract/token';
 
-export function getAccount(contractAddress) {
+export function getAccount(actions, contractAddress) {
     let savedAddress;
     let savedBalance;
     let savedSymbol;
     let savedDecimals;
     let savedTotalSupply;
-
-    let inHistory;
-    let outHistory;
-    let history;
 
     const loadDecimals = () => executeTokenMethod(
         contractAddress,
@@ -43,6 +39,29 @@ export function getAccount(contractAddress) {
         .then(totalSupply => totalSupply / savedDecimals)
         .then(number => savedTotalSupply = number);
 
+    return loadDecimals()
+        .then(loadSymbol)
+        .then(loadBalance)
+        .then(loadTotalSupply)
+        .then(() => {
+            actions.loadTransactionHistory(contractAddress, savedDecimals);
+
+            return {
+                address: savedAddress,
+                contractAddress: contractAddress,
+                balance: savedBalance,
+                decimals: savedDecimals,
+                symbol: savedSymbol,
+                totalSupply: savedTotalSupply
+            }
+        });
+}
+
+export function getTransactionHistory(contractAddress, decimals) {
+    let inHistory;
+    let outHistory;
+    let history;
+
     const mapHistoryItem = (item, direction) => ({
         blockHash: item.blockHash,
         blockNumber: item.blockNumber,
@@ -50,7 +69,7 @@ export function getAccount(contractAddress) {
         direction: direction,
         from: item.returnValues._from,
         to: item.returnValues._to,
-        value: Number.parseInt(item.returnValues._value) / savedDecimals
+        value: Number.parseInt(item.returnValues._value) / decimals
     });
 
     const loadInHistory = () => getTransferHistory(
@@ -73,22 +92,13 @@ export function getAccount(contractAddress) {
             .sort((first, second) => second.blockNumber - first.blockNumber);
     };
 
-    return loadDecimals()
-        .then(loadSymbol)
-        .then(loadBalance)
-        .then(loadTotalSupply)
-        // .then(loadInHistory)
-        // .then(loadOutHistory)
-        // .then(combineHistory)
-        .then(() => ({
-            address: savedAddress,
-            contractAddress: contractAddress,
-            balance: savedBalance,
-            decimals: savedDecimals,
-            symbol: savedSymbol,
-            totalSupply: savedTotalSupply,
-            history: history
-        }));
+    return loadInHistory()
+        .then(loadOutHistory)
+        .then(combineHistory)
+        .then(() => {
+            console.log(history);
+            return history;
+        });
 }
 
 export function sendMoney(to, value, decimals, contractAddress) {
@@ -102,7 +112,5 @@ export function sendMoney(to, value, decimals, contractAddress) {
         .catch(() => console.log('Error during sending money'));
 
     return sendMoney()
-        .then(() => ({
-            transferTransactionHash: transferTransactionHash
-        }));
+        .then(() => ({transferTransactionHash}));
 }

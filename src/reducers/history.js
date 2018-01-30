@@ -1,0 +1,29 @@
+import typeToReducer from 'type-to-reducer';
+import {LOAD_TRANSACTION_HISTORY} from '../constants';
+
+const TRANSACTION_HISTORY_DEFAULT_STATE = {
+    history: null,
+    isPending: true,
+    error: null
+};
+
+export default typeToReducer({
+    [LOAD_TRANSACTION_HISTORY]: {
+        PENDING: (state, action) => ({
+            ...state,
+            isPending: true,
+            error: null
+        }),
+        REJECTED: (state, action) => ({
+            ...state,
+            isPending: false,
+            error: 'TODO: map error here'
+        }),
+        FULFILLED: (state, action) => ({
+            ...state,
+            history: action.payload,
+            isPending: false,
+            error: null
+        })
+    }
+}, TRANSACTION_HISTORY_DEFAULT_STATE);

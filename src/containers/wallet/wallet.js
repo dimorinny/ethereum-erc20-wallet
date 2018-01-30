@@ -18,12 +18,23 @@ export default class WalletPage extends Component {
             params: PropTypes.shape({
                 address: PropTypes.string.isRequired,
             }).isRequired
-        })
+        }),
+        accountState: PropTypes.shape({
+            account: PropTypes.object,
+            isPending: PropTypes.bool.isRequired,
+            error: PropTypes.object
+        }).isRequired,
+        transactionHistoryState: PropTypes.shape({
+            history: PropTypes.array,
+            isPending: PropTypes.bool.isRequired,
+            error: PropTypes.object
+        }).isRequired
     };
 
     componentDidMount() {
         const {actions, match: {params: {address}}} = this.props;
-        actions.loadAccount(address);
+
+        actions.loadAccount(actions, address);
     };
 
     render() {
@@ -66,7 +77,7 @@ export default class WalletPage extends Component {
 
     renderWallet() {
         const {account} = this.props.accountState;
-        // const {history} = account;
+        const historyState = this.props.transactionHistoryState;
 
         return (
             <Grid columns='equal'>
@@ -83,9 +94,9 @@ export default class WalletPage extends Component {
                         Transaction History
                     </Divider>
 
-                    {/*<History*/}
-                        {/*history={history}*/}
-                    {/*/>*/}
+                    <History
+                        historyState={historyState}
+                    />
                 </Grid.Column>
                 <Grid.Column/>
             </Grid>
@@ -95,7 +106,8 @@ export default class WalletPage extends Component {
 
 function mapStateToProps(state) {
     return {
-        accountState: state.account
+        accountState: state.account,
+        transactionHistoryState: state.history
     };
 }
 

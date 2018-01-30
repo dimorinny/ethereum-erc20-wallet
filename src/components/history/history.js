@@ -9,22 +9,28 @@ import './history.css';
 export default class History extends Component {
 
     static propTypes = {
-        history: PropTypes.arrayOf(
-            PropTypes.shape({
-                blockHash: PropTypes.string.isRequired,
-                blockNumber: PropTypes.number.isRequired,
-                from: PropTypes.string.isRequired,
-                to: PropTypes.string.isRequired,
-                transactionHash: PropTypes.string.isRequired,
-                value: PropTypes.number.isRequired
-            })
-        ).isRequired
+        historyState: PropTypes.shape({
+            history: PropTypes.arrayOf(
+                PropTypes.shape({
+                    blockHash: PropTypes.string.isRequired,
+                    blockNumber: PropTypes.number.isRequired,
+                    from: PropTypes.string.isRequired,
+                    to: PropTypes.string.isRequired,
+                    transactionHash: PropTypes.string.isRequired,
+                    value: PropTypes.number.isRequired
+                })
+            ),
+            isPending: PropTypes.bool.isRequired,
+            error: PropTypes.object
+        }).isRequired
     };
 
     render() {
+        const {history} = this.props.historyState;
+
         let historyView;
 
-        if (history.length === 0) {
+        if (!history || history.length === 0) {
             historyView = History.renderEmpty();
         } else {
             historyView = this.renderContent();
@@ -38,7 +44,7 @@ export default class History extends Component {
     };
 
     renderContent() {
-        const history = this.props.history;
+        const {history} = this.props.historyState;
 
         return (
             <div>
