@@ -1,18 +1,18 @@
 .small_error_container {
-    width: 275px;
+    width: 234px;
     overflow: hidden;
 }
 
 .small_error_image {
     display: block;
     margin-bottom: 20px;
-    height: 130px;
+    height: 110px;
 }
 
 .small_error_title {
     font-family: 'Roboto Thin', serif;
     text-align: center;
     margin-bottom: 12px;
-    font-size: 18pt;
+    font-size: 16pt;
     color: #474A4E;
 }

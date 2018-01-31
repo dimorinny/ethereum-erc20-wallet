@@ -1,5 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import {LOAD_TRANSACTION_HISTORY} from '../constants';
+import {typeToError} from '../error/history';
 
 const TRANSACTION_HISTORY_DEFAULT_STATE = {
     history: null,
@@ -17,7 +18,7 @@ export default typeToReducer({
         REJECTED: (state, action) => ({
             ...state,
             isPending: false,
-            error: 'TODO: map error here'
+            error: typeToError(action.payload)
         }),
         FULFILLED: (state, action) => ({
             ...state,

@@ -95,10 +95,7 @@ export function getTransactionHistory(contractAddress, decimals) {
     return loadInHistory()
         .then(loadOutHistory)
         .then(combineHistory)
-        .then(() => {
-            console.log(history);
-            return history;
-        });
+        .then(() => history);
 }
 
 export function sendMoney(to, value, decimals, contractAddress) {

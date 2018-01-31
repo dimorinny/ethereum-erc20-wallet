@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {PropTypes} from 'prop-types';
-import {Table, Label} from 'semantic-ui-react';
+import {Table, Label, Loader} from 'semantic-ui-react';
 import SmallError from '../error/small/small';
 import {transactionLink, addressLink} from '../../util/etherscan';
 import {EMPTY_TRANSACTION_HISTORY} from '../../error/type';
@@ -26,14 +26,24 @@ export default class History extends Component {
     };
 
     render() {
-        const {history} = this.props.historyState;
+        const {
+            history,
+            isPending,
+            error
+        } = this.props.historyState;
 
         let historyView;
 
-        if (!history || history.length === 0) {
-            historyView = History.renderEmpty();
+        if (isPending) {
+            historyView = History.renderProgress();
+        } else if (error) {
+            historyView = this.renderError();
         } else {
-            historyView = this.renderContent();
+            if (history.length === 0) {
+                historyView = History.renderEmpty();
+            } else {
+                historyView = this.renderContent();
+            }
         }
 
         return (
@@ -67,12 +77,36 @@ export default class History extends Component {
         );
     };
 
+    renderError() {
+        const {error} = this.props.historyState;
+
+        return (
+            <div>
+                <SmallError
+                    className='transaction_history_message'
+                    payload={error}/>
+            </div>
+        );
+    };
+
     static renderEmpty() {
         return (
             <div>
                 <SmallError
-                    className='transaction_history_empty_error'
+                    className='transaction_history_message'
                     payload={EMPTY_TRANSACTION_HISTORY}/>
+            </div>
+        );
+    };
+
+    static renderProgress() {
+        return (
+            <div>
+                <Loader
+                    active
+                    className='transaction_history_empty_progress'
+                    size='medium'
+                    inline='centered'/>
             </div>
         );
     };

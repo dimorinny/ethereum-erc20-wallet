@@ -12,6 +12,11 @@ export const EMPTY_TRANSACTION_HISTORY = {
     title: 'Transaction History Is Empty'
 };
 
+export const TRANSACTION_HISTORY_LOAD_ERROR = {
+    img: addressPath,
+    title: 'Transaction History Loading Error'
+};
+
 export const WEB3_ERROR = {
     img: metamaskPath,
     title: 'Account Loading Error',
