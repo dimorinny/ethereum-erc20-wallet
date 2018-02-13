@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Form} from 'semantic-ui-react';
 import ethereumPath from '../../../static/img/ethereum.png';
+import tokens from '../../util/tokens/tokens.json';
 import './input.css';
 
 const FORM_NAME = 'input';
@@ -33,16 +34,21 @@ export default class InputPage extends Component {
                     <img className='input_header_image' src={ethereumPath}/>
                 </div>
 
-
                 <Form onSubmit={() => history.push(inputText)}>
                     <Form.Field>
                         <div className='ui massive input input_field'>
                             <Field
                                 name='input'
                                 component='input'
-                                placeholder='0x1fDE9bAf52bBa2Ae3CC019FeD9d0C77...'
+                                list='tokens'
+                                placeholder='0x1fDE9bAf52bBa2Ae3CC... or token symbol (SNT)'
                                 type='text'
                             />
+                            <datalist id='tokens'>
+                                {
+                                    tokens.map((item) => <option key={item.symbol} value={item.symbol}/>)
+                                }
+                            </datalist>
                         </div>
                     </Form.Field>
                 </Form>
