@@ -1,11 +1,18 @@
 import {executeTokenMethod, getTransferHistory} from '../contract/token';
+import getAddressByTokenName from '../util/token.js';
 
-export function getAccount(actions, contractAddress) {
+export function getAccount(actions, addressParam) {
+    let contractAddress;
     let savedAddress;
     let savedBalance;
     let savedSymbol;
     let savedDecimals;
     let savedTotalSupply;
+
+    const getContractAddress = () => new Promise((resolve, _) => {
+        resolve(getAddressByTokenName(addressParam) || addressParam);
+    })
+        .then(address => contractAddress = address);
 
     const loadDecimals = () => executeTokenMethod(
         contractAddress,
@@ -39,13 +46,13 @@ export function getAccount(actions, contractAddress) {
         .then(totalSupply => totalSupply / savedDecimals)
         .then(number => savedTotalSupply = number);
 
-    return loadDecimals()
+    return getContractAddress()
+        .then(loadDecimals)
         .then(loadSymbol)
         .then(loadBalance)
         .then(loadTotalSupply)
         .then(() => {
             actions.loadTransactionHistory(contractAddress, savedDecimals);
-
             return {
                 address: savedAddress,
                 contractAddress: contractAddress,
